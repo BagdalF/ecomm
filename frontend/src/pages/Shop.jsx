@@ -48,12 +48,15 @@ const Shop = () => {
       if (!filteredProductsQuery.isLoading) {
         const filteredProducts = filteredProductsQuery.data.filter(
           (product) => {
+            console.log(
+              `prod:${product.price} min:${priceFilter.min} max:${priceFilter.max}`
+            );
             return !productSearch?.length
-              ? product.price >= parseFloat(priceFilter.min, 10) &&
-                  product.price <= parseFloat(priceFilter.max, 10)
+              ? product.price >= priceFilter.min &&
+                  product.price <= priceFilter.max
               : product.name.toString().toLowerCase().includes(productSearch) &&
-                  product.price >= parseFloat(priceFilter.min, 10) &&
-                  product.price <= parseFloat(priceFilter.max, 10);
+                  product.price >= priceFilter.min &&
+                  product.price <= priceFilter.max;
           }
         );
 
@@ -93,11 +96,11 @@ const Shop = () => {
   };
 
   const handleMinPriceChange = (e) => {
-    setPriceFilter({ min: e.target.value });
+    setPriceFilter({ min: parseFloat(e.target.value), ...priceFilter });
   };
 
   const handleMaxPriceChange = (e) => {
-    setPriceFilter({ max: e.target.value });
+    setPriceFilter({ ...priceFilter, max: parseFloat(e.target.value) });
   };
 
   return (
